@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rasoi — Log in</title>
+<meta name="description" content="Log in to Rasoi, your AI kitchen assistant.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232E6B4A'/%3E%3Cpath d='M20 40c0-9 6-17 12-17s12 8 12 17' stroke='%23FAF3E5' stroke-width='3.4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M32 23v17' stroke='%23E2872E' stroke-width='3.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,400..700&family=Caveat:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF3E5;
+    --paper:#FFFFFF;
+    --ink:#241F18;
+    --ink-soft:#6B6354;
+    --ink-faint:#A89F8C;
+    --basil:#2E6B4A;
+    --basil-deep:#16331F;
+    --basil-light:#E1EBDA;
+    --turmeric:#E2872E;
+    --turmeric-deep:#B5621A;
+    --turmeric-light:#FBE6C8;
+    --blue:#2C6B8C;
+    --blue-deep:#18435A;
+    --blue-light:#DCEAF0;
+    --line:rgba(36,31,24,0.13);
+    --shadow:0 24px 60px -28px rgba(22,51,31,0.45);
+    --shadow-sm:0 10px 24px -16px rgba(22,51,31,0.35);
+    --radius:20px;
+    --font-display:'Fraunces',serif;
+    --font-hand:'Caveat',cursive;
+    --font-body:'Manrope',sans-serif;
+    --font-mono:'Space Mono',monospace;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  :focus-visible{outline:2.5px solid var(--blue);outline-offset:3px;border-radius:4px}
+
+  h1,h2,h3{font-family:var(--font-display);font-weight:600;line-height:1.08;letter-spacing:-.01em;color:var(--ink)}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    padding:14px 26px;border-radius:999px;font-weight:700;font-size:.97rem;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+    white-space:nowrap;width:100%;
+  }
+  .btn-primary{background:var(--turmeric);color:#2A1604;box-shadow:var(--shadow-sm)}
+  .btn-primary:hover{background:var(--turmeric-deep);transform:translateY(-2px);box-shadow:0 16px 30px -14px rgba(181,98,26,.55)}
+
+  /* --- NAV --- */
+  .site-header{
+    padding:18px 32px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--line);
+    background:rgba(250,243,229,.88);
+    backdrop-filter:blur(10px);
+    position:sticky;top:0;z-index:10;
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:1.3rem;color:var(--ink)}
+  .brand-mark{width:34px;height:34px;border-radius:10px;background:var(--basil);display:flex;align-items:center;justify-content:center;flex:none}
+  .brand-mark svg{width:18px;height:18px}
+  .header-link{font-size:.9rem;font-weight:600;color:var(--ink-soft);transition:color .15s}
+  .header-link:hover{color:var(--basil)}
+
+  /* --- PAGE LAYOUT --- */
+  .page{
+    flex:1;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    min-height:calc(100vh - 73px);
+  }
+
+  /* --- LEFT PANEL (decorative) --- */
+  .panel-left{
+    background:linear-gradient(160deg, var(--basil) 0%, var(--basil-deep) 100%);
+    display:flex;flex-direction:column;justify-content:center;
+    padding:64px 56px;
+    position:relative;
+    overflow:hidden;
+  }
+  .panel-left::before{
+    content:"";position:absolute;
+    width:380px;height:380px;border-radius:50%;
+    background:rgba(255,255,255,.05);
+    top:-80px;right:-120px;
+  }
+  .panel-left::after{
+    content:"";position:absolute;
+    width:260px;height:260px;border-radius:50%;
+    background:rgba(226,135,46,.12);
+    bottom:-60px;left:-60px;
+  }
+  .panel-content{position:relative;z-index:1}
+  .panel-eyebrow{
+    font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    color:rgba(207,227,214,.75);display:inline-flex;align-items:center;gap:8px;margin-bottom:22px;
+  }
+  .panel-eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--turmeric)}
+  .panel-left h2{font-family:var(--font-display);font-size:clamp(1.8rem,2.4vw,2.6rem);color:#fff;line-height:1.1;margin-bottom:18px}
+  .panel-left h2 em{font-style:italic;color:#9FD4B3}
+  .panel-left p{color:#CFE3D6;font-size:.97rem;line-height:1.65;max-width:38ch;margin-bottom:40px}
+
+  .testimonial{
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);
+    border-radius:16px;padding:22px 24px;
+  }
+  .testimonial p{font-size:.92rem;color:#E7F0E9;line-height:1.6;margin-bottom:14px}
+  .t-person{display:flex;align-items:center;gap:10px}
+  .t-avatar{width:34px;height:34px;border-radius:50%;background:var(--turmeric);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;font-size:.76rem;color:#fff;flex:none}
+  .t-name{font-weight:700;font-size:.84rem;color:#fff}
+  .t-role{font-size:.76rem;color:#9FD4B3}
+
+  /* --- RIGHT PANEL (form) --- */
+  .panel-right{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:56px 48px;
+    background:var(--paper);
+  }
+  .form-box{width:100%;max-width:400px}
+
+  .mode-tabs{
+    display:flex;gap:4px;background:var(--cream);border-radius:999px;padding:4px;
+    margin-bottom:34px;
+  }
+  .mode-tab{
+    flex:1;text-align:center;padding:9px 16px;border-radius:999px;font-weight:700;font-size:.88rem;
+    color:var(--ink-soft);cursor:pointer;transition:background .18s ease, color .18s ease, box-shadow .18s ease;
+    border:none;background:none;font-family:var(--font-body);
+  }
+  .mode-tab.active{background:var(--paper);color:var(--ink);box-shadow:0 2px 8px rgba(36,31,24,.12)}
+
+  .form-head{margin-bottom:28px}
+  .form-head h1{font-size:1.75rem;margin-bottom:6px}
+  .form-head p{color:var(--ink-soft);font-size:.93rem}
+
+  .field{margin-bottom:18px}
+  .field label{
+    display:block;font-size:.82rem;font-weight:700;color:var(--ink);
+    margin-bottom:7px;letter-spacing:.01em;
+  }
+  .field input{
+    width:100%;padding:12px 16px;border:1.6px solid var(--line);border-radius:12px;
+    font-family:var(--font-body);font-size:.97rem;color:var(--ink);background:var(--cream);
+    transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    outline:none;
+  }
+  .field input:focus{
+    border-color:var(--basil);background:var(--paper);
+    box-shadow:0 0 0 3.5px rgba(46,107,74,.14);
+  }
+  .field input::placeholder{color:var(--ink-faint)}
+
+  .field-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+  .field-row label{margin-bottom:0}
+  .forgot{font-size:.8rem;font-weight:600;color:var(--basil);transition:color .15s}
+  .forgot:hover{color:var(--basil-deep)}
+
+  .password-wrap{position:relative}
+  .password-wrap input{padding-right:48px}
+  .toggle-eye{
+    position:absolute;right:14px;top:50%;transform:translateY(-50%);
+    background:none;border:none;cursor:pointer;color:var(--ink-faint);
+    padding:4px;transition:color .15s;
+    display:flex;align-items:center;
+  }
+  .toggle-eye:hover{color:var(--ink)}
+  .toggle-eye svg{width:18px;height:18px}
+
+  .name-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+  .submit-btn{margin-top:6px}
+
+  .divider{display:flex;align-items:center;gap:12px;margin:22px 0;color:var(--ink-faint);font-size:.82rem;font-family:var(--font-mono)}
+  .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .google-btn{
+    width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+    padding:13px 20px;border-radius:999px;border:1.6px solid var(--line);
+    font-family:var(--font-body);font-weight:700;font-size:.93rem;color:var(--ink);
+    background:var(--paper);cursor:pointer;
+    transition:background .18s ease, border-color .18s ease, transform .18s ease;
+  }
+  .google-btn:hover{background:var(--cream);border-color:rgba(36,31,24,.28);transform:translateY(-1px)}
+  .google-btn svg{width:19px;height:19px;flex:none}
+
+  .switch-mode{text-align:center;margin-top:26px;font-size:.88rem;color:var(--ink-soft)}
+  .switch-mode a{color:var(--basil);font-weight:700;transition:color .15s}
+  .switch-mode a:hover{color:var(--basil-deep)}
+
+  .terms{text-align:center;margin-top:18px;font-size:.77rem;color:var(--ink-faint);line-height:1.5}
+  .terms a{color:var(--ink-soft);text-decoration:underline;text-underline-offset:2px}
+
+  /* error state */
+  .field input.error{border-color:#C0392B;background:#FFF8F8}
+  .field-error{font-size:.78rem;color:#C0392B;margin-top:5px;display:none}
+  .field input.error + .field-error,
+  .field-error.show{display:block}
+
+  /* toast */
+  .toast{
+    position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--basil-deep);color:#fff;padding:13px 22px;border-radius:999px;
+    font-size:.88rem;font-weight:600;opacity:0;transition:opacity .3s ease, transform .3s ease;
+    pointer-events:none;z-index:999;white-space:nowrap;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* signup-only fields */
+  .signup-only{display:none}
+  body.signup-mode .signup-only{display:block}
+  body.signup-mode .name-row{display:grid}
+
+  /* responsive */
+  @media(max-width:860px){
+    .page{grid-template-columns:1fr}
+    .panel-left{display:none}
+    .panel-right{padding:40px 24px}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a href="index.html" class="brand">
+    <span class="brand-mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 15c0-5 2.7-9 6-9s6 4 6 9" stroke="#FAF3E5" stroke-width="1.8" stroke-linecap="round"/><path d="M12 6v9" stroke="#E2872E" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </span>
+    <span>Rasoi</span>
+  </a>
+  <a href="index.html" class="header-link">← Back to home</a>
+</header>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- LEFT: decorative panel -->
+  <div class="panel-left">
+    <div class="panel-content">
+      <span class="panel-eyebrow">Your AI kitchen assistant</span>
+      <h2>Cook more.<br>Waste <em>less</em>.<br>Spend smarter.</h2>
+      <p>Tell Rasoi what's in your fridge and it handles the rest — recipes, budgets, and meal plans built around what you already have.</p>
+      <div class="testimonial">
+        <p>"I had rice, eggs, and one onion. Rasoi turned that into dinner in twelve minutes."</p>
+        <div class="t-person">
+          <div class="t-avatar">A</div>
+          <div>
+            <div class="t-name">Ananya</div>
+            <div class="t-role">Hostel student, Bengaluru</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: form panel -->
+  <div class="panel-right">
+    <div class="form-box">
+
+      <!-- mode tabs -->
+      <div class="mode-tabs" role="tablist">
+        <button class="mode-tab active" id="tab-login" role="tab" onclick="setMode('login')">Log in</button>
+        <button class="mode-tab" id="tab-signup" role="tab" onclick="setMode('signup')">Sign up</button>
+      </div>
+
+      <!-- form head -->
+      <div class="form-head">
+        <h1 id="form-title">Welcome back</h1>
+        <p id="form-sub">Log in to your Rasoi account.</p>
+      </div>
+
+      <!-- form -->
+      <form id="auth-form" novalidate>
+
+        <!-- signup-only: name row -->
+        <div class="name-row signup-only">
+          <div class="field">
+            <label for="first-name">First name</label>
+            <input type="text" id="first-name" name="first_name" placeholder="Priya" autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label for="last-name">Last name</label>
+            <input type="text" id="last-name" name="last_name" placeholder="Sharma" autocomplete="family-name">
+          </div>
+        </div>
+
+        <!-- email -->
+        <div class="field">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+          <p class="field-error" id="email-error">Please enter a valid email.</p>
+        </div>
+
+        <!-- password -->
+        <div class="field">
+          <div class="field-row">
+            <label for="password">Password</label>
+            <a href="#" class="forgot login-only" id="forgot-link">Forgot password?</a>
+          </div>
+          <div class="password-wrap">
+            <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required>
+            <button type="button" class="toggle-eye" aria-label="Show/hide password" onclick="togglePassword()">
+              <svg id="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+          <p class="field-error" id="pw-error">Password must be at least 8 characters.</p>
+        </div>
+
+        <!-- signup-only: confirm password -->
+        <div class="field signup-only">
+          <label for="confirm-password">Confirm password</label>
+          <div class="password-wrap">
+            <input type="password" id="confirm-password" name="confirm_password" placeholder="••••••••" autocomplete="new-password">
+          </div>
+          <p class="field-error" id="cpw-error">Passwords don't match.</p>
+        </div>
+
+        <div class="submit-btn">
+          <button type="submit" class="btn btn-primary" id="submit-btn">
+            <span id="btn-label">Log in</span>
+            <svg id="btn-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M4 10h12M11 5l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </form>
+
+      <div class="divider">or</div>
+
+      <!-- Google SSO -->
+      <button class="google-btn" type="button" onclick="googleAuth()">
+        <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.5 1.2 8.9 3.2l6.6-6.6C35.4 2.5 30 0 24 0 14.7 0 6.7 5.4 2.7 13.3l7.7 6C12.3 13.3 17.7 9.5 24 9.5Z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.15-3.2-.4-4.7H24v8.9h12.7c-.55 2.9-2.2 5.4-4.7 7.1l7.3 5.7c4.3-4 6.8-9.9 6.8-16.9Z" /><path fill="#FBBC05" d="M10.4 28.7A14.4 14.4 0 0 1 9.5 24c0-1.6.28-3.2.85-4.7l-7.7-6A23.8 23.8 0 0 0 0 24c0 3.9.93 7.6 2.7 10.7l7.7-6Z"/><path fill="#34A853" d="M24 48c6 0 11-2 14.7-5.3l-7.3-5.7c-2 1.4-4.6 2.2-7.4 2.2-6.3 0-11.6-3.8-13.6-9.2l-7.7 6C6.7 42.6 14.7 48 24 48Z"/></svg>
+        Continue with Google
+      </button>
+
+      <!-- mode switch -->
+      <p class="switch-mode" id="switch-text">
+        Don't have an account? <a href="#" onclick="setMode('signup');return false;" id="switch-link">Sign up free</a>
+      </p>
+
+      <!-- terms (shown on signup) -->
+      <p class="terms signup-only">By signing up you agree to our <a href="terms-of-service.html">Terms of Service</a> and <a href="privacy-policy.html">Privacy Policy</a>.</p>
+
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ---- MODE SWITCHING ---- */
+  let currentMode = 'login';
+
+  // Read ?mode=signup from URL on load
+  const urlMode = new URLSearchParams(location.search).get('mode');
+  if (urlMode === 'signup') setMode('signup');
+
+  function setMode(mode) {
+    currentMode = mode;
+    const isSignup = mode === 'signup';
+
+    document.body.classList.toggle('signup-mode', isSignup);
+
+    document.getElementById('tab-login').classList.toggle('active', !isSignup);
+    document.getElementById('tab-signup').classList.toggle('active', isSignup);
+
+    document.getElementById('form-title').textContent = isSignup ? 'Create your account' : 'Welcome back';
+    document.getElementById('form-sub').textContent = isSignup ? 'Free forever. No credit card needed.' : 'Log in to your Rasoi account.';
+    document.getElementById('btn-label').textContent = isSignup ? 'Create account' : 'Log in';
+    document.getElementById('forgot-link').style.display = isSignup ? 'none' : '';
+
+    document.getElementById('switch-text').innerHTML = isSignup
+      ? `Already have an account? <a href="#" onclick="setMode('login');return false;">Log in</a>`
+      : `Don't have an account? <a href="#" onclick="setMode('signup');return false;">Sign up free</a>`;
+
+    // update autocomplete hint for password
+    document.getElementById('password').setAttribute('autocomplete', isSignup ? 'new-password' : 'current-password');
+
+    // update URL without reload
+    const url = new URL(location.href);
+    url.searchParams.set('mode', mode);
+    history.replaceState(null, '', url);
+  }
+
+  /* ---- PASSWORD TOGGLE ---- */
+  function togglePassword() {
+    const inp = document.getElementById('password');
+    const icon = document.getElementById('eye-icon');
+    const show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    icon.innerHTML = show
+      ? `<path d="M17.9 17.9 6.1 6.1M10.5 6.1A10 10 0 0 1 12 6c7 0 11 6 11 6s-1.4 2.3-3.7 4.1M9 9a3 3 0 0 0 4.2 4.3" stroke-linecap="round" stroke-linejoin="round"/>`
+      : `<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z"/><circle cx="12" cy="12" r="3"/>`;
+  }
+
+  /* ---- FORM SUBMIT ---- */
+  document.getElementById('auth-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let valid = true;
+
+    const email = document.getElementById('email');
+    const pw = document.getElementById('password');
+    const cpw = document.getElementById('confirm-password');
+
+    // reset
+    [email, pw, cpw].forEach(el => el.classList.remove('error'));
+    document.querySelectorAll('.field-error').forEach(el => el.classList.remove('show'));
+
+    // validate email
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+      email.classList.add('error');
+      document.getElementById('email-error').classList.add('show');
+      valid = false;
+    }
+
+    // validate password length
+    if (pw.value.length < 8) {
+      pw.classList.add('error');
+      document.getElementById('pw-error').classList.add('show');
+      valid = false;
+    }
+
+    // signup: confirm password
+    if (currentMode === 'signup' && cpw.value !== pw.value) {
+      cpw.classList.add('error');
+      document.getElementById('cpw-error').classList.add('show');
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    // Simulate success → redirect to dashboard
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.style.opacity = '.7';
+    document.getElementById('btn-label').textContent = currentMode === 'signup' ? 'Creating account…' : 'Logging in…';
+
+    setTimeout(() => {
+      showToast(currentMode === 'signup' ? 'Account created! Taking you to your dashboard…' : 'Logged in! Taking you to your dashboard…');
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+    }, 900);
+  });
+
+  /* ---- GOOGLE AUTH ---- */
+  function googleAuth() {
+    showToast('Redirecting to Google…');
+    // In production, redirect to your OAuth endpoint here
+    // e.g. window.location.href = '/auth/google';
+  }
+
+  /* ---- TOAST ---- */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>
